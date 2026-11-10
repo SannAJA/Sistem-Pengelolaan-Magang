@@ -1,0 +1,17 @@
+body.journals-page .soft-card {
+    border-top: 3px solid rgba(0, 123, 152, 0.22);
+}
+
+body.journals-page .journal-form-card {
+    background:
+        linear-gradient(135deg, rgba(0, 123, 152, 0.04), transparent 45%),
+        var(--klik-white);
+}
+
+body.journals-page .journal-history-card {
+    margin-top: 1.25rem;
+}
+
+body.journals-page .table-responsive {
+    border-radius: 1rem;
+}

@@ -1,0 +1,8 @@
+body.attendance-page .soft-card {
+    border-top: 3px solid rgba(209, 16, 24, 0.22);
+}
+
+body.attendance-page .modal-form .btn-klik-primary,
+body.attendance-page .modal-form .btn-klik-secondary {
+    min-width: 140px;
+}

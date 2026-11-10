@@ -1,0 +1,45 @@
+body.admin-journals-page .soft-card {
+    border-top: 3px solid rgba(0, 123, 152, 0.22);
+}
+
+body.admin-journals-page .photo-thumb-btn {
+    display: inline-block;
+    border-radius: 0.85rem;
+    overflow: hidden;
+}
+
+body.admin-journals-page .photo-thumb {
+    width: 68px;
+    height: 68px;
+    object-fit: cover;
+    border-radius: 0.85rem;
+    border: 1.5px solid var(--klik-border);
+    cursor: pointer;
+    transition: transform 0.22s ease, filter 0.22s ease;
+}
+
+body.admin-journals-page .photo-thumb-btn:hover .photo-thumb {
+    transform: scale(1.06);
+    filter: brightness(0.92);
+}
+
+body.admin-journals-page .photo-thumb-badge {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: rgba(15, 23, 42, 0.7);
+    color: #fff;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+body.admin-journals-page .photo-thumb-btn:hover .photo-thumb-badge {
+    opacity: 1;
+}

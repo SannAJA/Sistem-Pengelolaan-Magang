@@ -1,0 +1,55 @@
+body.dashboard-admin-page .metric-card {
+    background: var(--klik-white);
+    border: 1px solid var(--klik-border);
+    border-radius: 1.35rem;
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+body.dashboard-admin-page .metric-card:hover {
+    box-shadow: 0 20px 35px -10px rgba(15, 23, 42, 0.08);
+    transform: translateY(-3px);
+}
+
+body.dashboard-admin-page .metric-icon {
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    transition: transform 0.25s ease;
+}
+
+body.dashboard-admin-page .metric-card:hover .metric-icon {
+    transform: scale(1.08);
+}
+
+/* Metric Colors */
+body.dashboard-admin-page .metric-red .metric-icon {
+    background: #fee2e2;
+    color: var(--klik-red);
+}
+
+body.dashboard-admin-page .metric-blue .metric-icon {
+    background: #e0f2fe;
+    color: var(--klik-blue);
+}
+
+body.dashboard-admin-page .metric-green .metric-icon {
+    background: #dcfce7;
+    color: #16a34a;
+}
+
+body.dashboard-admin-page .metric-dark .metric-icon {
+    background: #f1f5f9;
+    color: #334155;
+}
+
+body.dashboard-admin-page .metric-red:hover { border-color: rgba(209, 16, 24, 0.3); }
+body.dashboard-admin-page .metric-blue:hover { border-color: rgba(0, 123, 152, 0.3); }
+body.dashboard-admin-page .metric-green:hover { border-color: rgba(22, 163, 74, 0.3); }
+body.dashboard-admin-page .metric-dark:hover { border-color: rgba(51, 65, 85, 0.3); }

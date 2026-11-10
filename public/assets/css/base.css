@@ -1,0 +1,855 @@
+:root {
+    --klik-red: #d11018;
+    --klik-red-hover: #b30d14;
+    --klik-red-light: rgba(209, 16, 24, 0.08);
+    --klik-red-glow: rgba(209, 16, 24, 0.28);
+    --klik-black: #0f172a;
+    --klik-blue: #007b98;
+    --klik-blue-hover: #006076;
+    --klik-blue-light: rgba(0, 123, 152, 0.08);
+    --klik-blue-glow: rgba(0, 123, 152, 0.28);
+    --klik-bg: #f8fafc;
+    --klik-white: #ffffff;
+    --klik-text-main: #1e293b;
+    --klik-text-muted: #64748b;
+    --klik-border: #e2e8f0;
+    --klik-border-light: #f1f5f9;
+    --klik-success: #16a34a;
+    --klik-warning: #f59e0b;
+    --klik-danger: #ef4444;
+}
+
+html,
+body {
+    min-height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(0, 123, 152, 0.05), transparent 30%),
+        radial-gradient(circle at 90% 15%, rgba(209, 16, 24, 0.05), transparent 28%),
+        radial-gradient(circle at 50% 90%, rgba(0, 123, 152, 0.03), transparent 40%),
+        var(--klik-bg);
+    color: var(--klik-text-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   Typography & Links
+   ========================================================================== */
+a {
+    color: var(--klik-blue);
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+a:hover {
+    color: var(--klik-blue-hover);
+}
+
+.text-klik-red {
+    color: var(--klik-red) !important;
+}
+
+.text-klik-blue {
+    color: var(--klik-blue) !important;
+}
+
+.bg-klik-black {
+    background-color: var(--klik-black) !important;
+}
+
+.bg-klik-red {
+    background-color: var(--klik-red) !important;
+}
+
+.bg-klik-blue {
+    background-color: var(--klik-blue) !important;
+}
+
+.border-klik {
+    border-color: var(--klik-border) !important;
+}
+
+/* ==========================================================================
+   Interactive Buttons
+   ========================================================================== */
+.btn {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    padding: 0.55rem 1.25rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    user-select: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0px) scale(0.97);
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 152, 0.25);
+}
+
+/* Primary Button (Klik Red) */
+.btn-klik-primary {
+    background-color: var(--klik-red);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.05) 100%);
+    border: 1px solid var(--klik-red);
+    color: #fff;
+    box-shadow: 0 4px 12px var(--klik-red-glow);
+}
+
+.btn-klik-primary:hover,
+.btn-klik-primary:focus {
+    background-color: var(--klik-red-hover);
+    border-color: var(--klik-red-hover);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(209, 16, 24, 0.4);
+}
+
+.btn-klik-primary:active {
+    background-color: var(--klik-red-hover);
+    box-shadow: 0 2px 6px var(--klik-red-glow);
+}
+
+/* Secondary Button (Klik Blue) */
+.btn-klik-secondary {
+    background-color: var(--klik-blue);
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.05) 100%);
+    border: 1px solid var(--klik-blue);
+    color: #fff;
+    box-shadow: 0 4px 12px var(--klik-blue-glow);
+}
+
+.btn-klik-secondary:hover,
+.btn-klik-secondary:focus {
+    background-color: var(--klik-blue-hover);
+    border-color: var(--klik-blue-hover);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 123, 152, 0.4);
+}
+
+.btn-klik-secondary:active {
+    background-color: var(--klik-blue-hover);
+    box-shadow: 0 2px 6px var(--klik-blue-glow);
+}
+
+/* Outlines & Actions */
+.btn-outline-secondary {
+    border-color: #cbd5e1;
+    color: #475569;
+    background-color: #fff;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f1f5f9;
+    border-color: #94a3b8;
+    color: #1e293b;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.btn-outline-danger {
+    border-color: #fca5a5;
+    color: #dc2626;
+    background-color: #fff;
+}
+
+.btn-outline-danger:hover {
+    background-color: #fef2f2;
+    border-color: #ef4444;
+    color: #b91c1c;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+.btn-logout {
+    border-color: #fecaca;
+    color: #dc2626;
+    background: rgba(239, 68, 68, 0.04);
+}
+
+.btn-logout:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.25);
+}
+
+/* Table action buttons */
+.btn-action-edit {
+    border: 1px solid #e2e8f0;
+    background-color: #fff;
+    color: #334155;
+    font-size: 0.8125rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+}
+
+.btn-action-edit:hover {
+    background-color: var(--klik-blue-light);
+    border-color: var(--klik-blue);
+    color: var(--klik-blue);
+}
+
+.btn-action-delete {
+    border: 1px solid #fee2e2;
+    background-color: #fff;
+    color: #dc2626;
+    font-size: 0.8125rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+}
+
+.btn-action-delete:hover {
+    background-color: #fef2f2;
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+/* ==========================================================================
+   Layout: Top Navigation Bar, Header & Main Container
+   ========================================================================== */
+.app-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--klik-border);
+    box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.05);
+    padding: 0.75rem 0;
+    z-index: 1030;
+    transition: all 0.2s ease;
+}
+
+.navbar-brand {
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.navbar-logo-wrap {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.75rem;
+    max-height: 40px !important;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.navbar-logo-wrap:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.navbar-logo-img {
+    height: 36px !important;
+    max-height: 36px !important;
+    max-width: 160px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    transition: transform 0.2s ease;
+}
+
+.navbar-logo-wrap:hover .navbar-logo-img {
+    transform: scale(1.02);
+}
+
+/* Top Nav Link Items */
+.navbar-nav {
+    flex-wrap: nowrap !important;
+}
+
+.top-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--klik-text-muted);
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 9999px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+}
+
+.top-nav-link span {
+    white-space: nowrap !important;
+    display: inline-block !important;
+}
+
+.top-nav-link i {
+    font-size: 1.05rem;
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0 !important;
+}
+
+.top-nav-link:hover {
+    color: var(--klik-blue);
+    background-color: var(--klik-blue-light);
+    transform: translateY(-1px);
+}
+
+.top-nav-link:hover i {
+    transform: scale(1.1);
+    color: var(--klik-blue);
+}
+
+.top-nav-link.active {
+    color: var(--klik-blue) !important;
+    background-color: var(--klik-blue-light);
+    border: 1px solid rgba(0, 123, 152, 0.25);
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0, 123, 152, 0.08);
+}
+
+.top-nav-link.active i {
+    color: var(--klik-blue);
+}
+
+/* Top-Right "Masuk Sebagai" User Section */
+.navbar-user-section {
+    position: relative;
+}
+
+.user-entry-badge {
+    background: #ffffff;
+    border: 1px solid var(--klik-border);
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.user-entry-badge:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.user-entry-clickable {
+    cursor: pointer;
+}
+
+.user-entry-clickable:hover {
+    border-color: var(--klik-blue);
+    background-color: var(--klik-blue-light);
+    transform: translateY(-1px);
+}
+
+.user-entry-avatar {
+    font-size: 1.85rem;
+    color: var(--klik-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.user-entry-info {
+    min-width: 0;
+}
+
+.user-entry-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--klik-text-muted);
+}
+
+.user-entry-name {
+    font-size: 0.875rem;
+    color: var(--klik-text-main);
+    max-width: 140px;
+    display: inline-block;
+}
+
+.badge-role-admin {
+    background-color: #fee2e2;
+    color: var(--klik-red);
+    border: 1px solid rgba(209, 16, 24, 0.2);
+    font-size: 0.72rem;
+    padding: 0.25em 0.65em;
+}
+
+.badge-role-student {
+    background-color: #e0f2fe;
+    color: var(--klik-blue);
+    border: 1px solid rgba(0, 123, 152, 0.2);
+    font-size: 0.72rem;
+    padding: 0.25em 0.65em;
+}
+
+/* Main Content & Page Titles */
+.main-content {
+    max-width: 1680px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.page-title {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: #0f172a;
+}
+
+/* ==========================================================================
+   Cards, Tables, & Badges
+   ========================================================================== */
+.soft-card {
+    background: var(--klik-white);
+    border: 1px solid var(--klik-border);
+    border-radius: 1.35rem;
+    box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.04), 0 2px 8px -2px rgba(15, 23, 42, 0.02);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.shadow-soft {
+    box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.1);
+}
+
+.table thead th {
+    color: var(--klik-text-muted);
+    font-size: 0.775rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #f8fafc;
+    border-bottom: 1px solid var(--klik-border);
+    padding: 0.9rem 1rem;
+}
+
+.table thead tr th:first-child {
+    border-top-left-radius: 0.75rem;
+    border-bottom-left-radius: 0.75rem;
+}
+
+.table thead tr th:last-child {
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+}
+
+.table tbody td {
+    padding: 1rem 1rem;
+    border-bottom-color: #f1f5f9;
+}
+
+.table tbody tr {
+    transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(0, 123, 152, 0.025);
+}
+
+.badge {
+    padding: 0.45em 0.85em;
+    font-weight: 600;
+    font-size: 0.78rem;
+    letter-spacing: 0.01em;
+}
+
+/* ==========================================================================
+   Form Controls
+   ========================================================================== */
+.form-control,
+.form-select {
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.95rem;
+    padding: 0.75rem 1rem;
+    font-size: 0.9375rem;
+    color: #1e293b;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.form-control::placeholder {
+    color: #94a3b8;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--klik-blue);
+    box-shadow: 0 0 0 4px rgba(0, 123, 152, 0.12);
+    background-color: #ffffff;
+}
+
+.form-label {
+    font-size: 0.875rem;
+    color: #334155;
+    margin-bottom: 0.4rem;
+}
+
+.pagination {
+    --bs-pagination-color: var(--klik-blue);
+    --bs-pagination-hover-color: var(--klik-blue-hover);
+    --bs-pagination-active-bg: var(--klik-blue);
+    --bs-pagination-active-border-color: var(--klik-blue);
+    --bs-pagination-border-radius: 0.75rem;
+}
+
+/* ==========================================================================
+   Smooth Modals & Transitions (Bootstrap)
+   ========================================================================== */
+.modal-backdrop.fade {
+    opacity: 0;
+    background-color: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(0px);
+    transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.modal-backdrop.show {
+    opacity: 1;
+    backdrop-filter: blur(8px);
+}
+
+.modal.fade .modal-dialog {
+    transform: scale(0.92) translateY(24px);
+    opacity: 0;
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal.show .modal-dialog {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.modal-content {
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    border-radius: 1.5rem;
+    box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.25);
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.modal-form .modal-dialog {
+    max-width: 580px;
+    width: calc(100% - 2rem);
+}
+
+.modal-form.modal-lg .modal-dialog {
+    max-width: 720px;
+}
+
+.modal-form .modal-header {
+    padding: 1.5rem 1.75rem 0.75rem;
+}
+
+.modal-form .modal-body {
+    padding: 0.75rem 1.75rem 1.75rem;
+}
+
+.modal-header {
+    padding: 1.25rem 1.5rem;
+}
+
+.modal-title {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+}
+
+.modal .btn-close {
+    padding: 0.75rem;
+    margin: -0.5rem -0.5rem -0.5rem auto;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    border-radius: 9999px;
+}
+
+.modal .btn-close:hover {
+    transform: rotate(90deg);
+    opacity: 0.8;
+}
+
+.modal-preview-img {
+    max-height: 75vh;
+    object-fit: contain;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   Custom Animated Popup / Dialog System (AppDialog)
+   ========================================================================== */
+.app-dialog-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.28s ease;
+}
+
+.app-dialog-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.app-dialog-card {
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.85);
+    border-radius: 1.5rem;
+    max-width: 440px;
+    width: 100%;
+    padding: 2rem 1.75rem 1.75rem;
+    text-align: center;
+    box-shadow: 0 30px 60px -12px rgba(15, 23, 42, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.02);
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+    transition: transform 0.32s cubic-bezier(0.34, 1.4, 0.64, 1), opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.app-dialog-backdrop.active .app-dialog-card {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.app-dialog-icon-wrap {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    font-size: 2.25rem;
+    animation: iconPopIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes iconPopIn {
+    0% {
+        transform: scale(0.4) rotate(-15deg);
+        opacity: 0;
+    }
+    70% {
+        transform: scale(1.1) rotate(4deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+/* Icon Variants */
+.app-dialog-warning .app-dialog-icon-wrap {
+    background: #fef3c7;
+    color: #d97706;
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.12);
+}
+
+.app-dialog-danger .app-dialog-icon-wrap {
+    background: #fee2e2;
+    color: #dc2626;
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0.12);
+}
+
+.app-dialog-success .app-dialog-icon-wrap {
+    background: #dcfce7;
+    color: #16a34a;
+    box-shadow: 0 0 0 8px rgba(22, 163, 74, 0.12);
+}
+
+.app-dialog-info .app-dialog-icon-wrap {
+    background: #e0f2fe;
+    color: #0284c7;
+    box-shadow: 0 0 0 8px rgba(2, 132, 199, 0.12);
+}
+
+.app-dialog-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.app-dialog-message {
+    font-size: 0.9375rem;
+    color: #64748b;
+    line-height: 1.55;
+    margin-bottom: 1.75rem;
+}
+
+.app-dialog-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.app-dialog-actions .btn {
+    flex: 1;
+    min-height: 44px;
+}
+
+/* ==========================================================================
+   Mobile Flexible UI & Left-to-Right Offcanvas Navigation System
+   ========================================================================== */
+.mobile-hamburger-btn,
+.mobile-profile-btn {
+    min-width: 48px !important;
+    min-height: 48px !important;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 0.75rem !important;
+    transition: background-color 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.mobile-hamburger-btn:active,
+.mobile-profile-btn:active {
+    background-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+.mobile-drawer-link {
+    min-height: 48px !important;
+    font-size: 0.9375rem !important;
+    color: var(--klik-text-main) !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer !important;
+}
+
+.mobile-drawer-link:hover,
+.mobile-drawer-link:focus {
+    background-color: var(--klik-blue-light) !important;
+    color: var(--klik-blue) !important;
+}
+
+.mobile-drawer-link.active-drawer {
+    background-color: var(--klik-red) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    box-shadow: 0 4px 12px var(--klik-red-glow) !important;
+}
+
+.mobile-drawer-link.active-drawer i {
+    color: #ffffff !important;
+}
+
+@media (max-width: 991.98px) {
+    .app-navbar {
+        padding: 0.5rem 0 !important;
+    }
+
+    .navbar-logo-wrap {
+        max-height: 40px !important;
+    }
+
+    .navbar-logo-img {
+        height: 40px !important;
+        max-height: 40px !important;
+        max-width: 180px !important;
+        width: auto !important;
+        object-fit: contain !important;
+    }
+
+    .main-content {
+        padding-top: 1rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+}
+
+/* Touch targets, Mobile Portrait Card & Responsive Table Optimizations */
+@media (max-width: 767.98px) {
+    body {
+        font-size: 0.9375rem;
+    }
+
+    .page-title {
+        font-size: 1.45rem !important;
+    }
+
+    .soft-card {
+        border-radius: 1.15rem;
+        padding: 1.25rem !important;
+    }
+
+    .btn {
+        padding: 0.65rem 1.15rem;
+    }
+
+    /* Mobile Responsive Card Table Transform */
+    .table-mobile-cards thead {
+        display: none !important;
+    }
+
+    .table-mobile-cards tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+
+    .table-mobile-cards tbody tr {
+        display: block;
+        background: #ffffff;
+        border: 1px solid var(--klik-border) !important;
+        border-radius: 1.1rem !important;
+        padding: 1rem 1.15rem !important;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03) !important;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .table-mobile-cards tbody tr:hover {
+        background: #ffffff;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06) !important;
+    }
+
+    .table-mobile-cards tbody tr td {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0.55rem 0 !important;
+        border-bottom: 1px dashed #f1f5f9 !important;
+        text-align: right;
+    }
+
+    .table-mobile-cards tbody tr td:last-child {
+        border-bottom: none !important;
+        padding-bottom: 0 !important;
+    }
+
+    .table-mobile-cards tbody tr td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--klik-text-muted);
+        text-align: left;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .table-mobile-cards tbody tr td:empty::before,
+    .table-mobile-cards tbody tr td[colspan]::before {
+        display: none;
+    }
+
+    .table-mobile-cards tbody tr td[colspan] {
+        display: block !important;
+        text-align: center !important;
+    }
+}
+
