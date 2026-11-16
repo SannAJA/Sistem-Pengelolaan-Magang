@@ -44,3 +44,18 @@ Route::middleware('auth')->group(function (): void {
         Route::put('/nilai/{grade}', [AdminGradeController::class, 'update'])->name('grades.update');
     });
 });
+
+Route::get('/storage/{path}', function (string $path) {
+    if (str_contains($path, '..')) {
+        abort(400);
+    }
+
+    $filePath = storage_path('app/public/' . $path);
+
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+
+    return response()->file($filePath);
+})->where('path', '.*')->name('storage.file');
+

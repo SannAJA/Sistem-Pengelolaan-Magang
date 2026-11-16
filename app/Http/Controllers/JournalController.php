@@ -31,22 +31,18 @@ class JournalController extends Controller
             'task_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ]);
 
-        $photoPath = null;
+        $journal = Journal::firstOrNew([
+            'user_id' => $request->user()->id,
+            'date' => Carbon::today()->toDateString(),
+        ]);
+
+        $journal->work_summary = $data['work_summary'];
 
         if ($request->hasFile('task_photo')) {
-            $photoPath = Storage::disk('public')->putFile('journals', $request->file('task_photo'));
+            $journal->task_photo_path = Storage::disk('public')->putFile('journals', $request->file('task_photo'));
         }
 
-        Journal::updateOrCreate(
-            [
-                'user_id' => $request->user()->id,
-                'date' => Carbon::today()->toDateString(),
-            ],
-            [
-                'work_summary' => $data['work_summary'],
-                'task_photo_path' => $photoPath,
-            ]
-        );
+        $journal->save();
 
         return back()->with('success', 'Jurnal harian berhasil disimpan.');
     }
