@@ -164,6 +164,7 @@
                     method="POST"
                     class="d-grid gap-3"
                     data-attendance-form
+                    data-office-locations="{{ json_encode($officeLocations->map(fn($loc) => ['name' => $loc->name, 'latitude' => (float)$loc->latitude, 'longitude' => (float)$loc->longitude, 'radius_meters' => (int)$loc->radius_meters])) }}"
                     data-office-latitude="{{ $officeLatitude }}"
                     data-office-longitude="{{ $officeLongitude }}"
                     data-max-radius-meters="{{ $maxRadiusMeters }}"

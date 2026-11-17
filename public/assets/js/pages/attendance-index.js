@@ -14,9 +14,22 @@ function initAttendanceForm() {
 
     const latitudeField = form.querySelector('[data-attendance-latitude]');
     const longitudeField = form.querySelector('[data-attendance-longitude]');
-    const officeLatitude = parseFloat(form.dataset.officeLatitude || '');
-    const officeLongitude = parseFloat(form.dataset.officeLongitude || '');
-    const maxRadiusMeters = parseFloat(form.dataset.maxRadiusMeters || '100');
+
+    let officeLocations = [];
+    try {
+        officeLocations = JSON.parse(form.dataset.officeLocations || '[]');
+    } catch (e) {
+        officeLocations = [];
+    }
+
+    if (officeLocations.length === 0 && form.dataset.officeLatitude) {
+        officeLocations.push({
+            name: 'Kantor',
+            latitude: parseFloat(form.dataset.officeLatitude),
+            longitude: parseFloat(form.dataset.officeLongitude),
+            radius_meters: parseFloat(form.dataset.maxRadiusMeters || '100')
+        });
+    }
 
     form.addEventListener('submit', async (event) => {
         if (form.dataset.locationReady === '1') {
@@ -48,27 +61,40 @@ function initAttendanceForm() {
             const position = await getCurrentPosition();
             const userLatitude = position.coords.latitude;
             const userLongitude = position.coords.longitude;
-            const distanceMeters = calculateDistanceMeters(
-                officeLatitude,
-                officeLongitude,
-                userLatitude,
-                userLongitude
-            );
 
-            if (distanceMeters > maxRadiusMeters) {
+            let closestLocation = null;
+            let minDistance = Infinity;
+
+            for (const loc of officeLocations) {
+                const dist = calculateDistanceMeters(
+                    loc.latitude,
+                    loc.longitude,
+                    userLatitude,
+                    userLongitude
+                );
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestLocation = loc;
+                }
+            }
+
+            const maxAllowedRadius = closestLocation ? closestLocation.radius_meters : 100;
+
+            if (minDistance > maxAllowedRadius) {
                 if (submitBtn) {
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = originalBtnHtml;
                 }
 
-                const roundedDist = Math.round(distanceMeters);
+                const roundedDist = Math.round(minDistance);
+                const locName = closestLocation ? closestLocation.name : 'Kantor';
                 if (window.AppDialog) {
                     window.AppDialog.warning({
                         title: 'Di Luar Radius Kantor',
-                        message: `Jarak Anda (${roundedDist} m) melebihi batas radius kantor (${maxRadiusMeters} m). Pastikan Anda berada di lokasi kantor untuk melakukan absensi.`
+                        message: `Jarak Anda (${roundedDist} m dari ${locName}) melebihi batas radius kantor (${maxAllowedRadius} m). Pastikan Anda berada di area salah satu kantor cabang untuk melakukan absensi.`
                     });
                 } else {
-                    window.alert('Jarak Terlalu Jauh, Tidak Bisa Melakukan Absensi');
+                    window.alert(`Jarak Anda (${roundedDist} m dari ${locName}) melebihi batas radius kantor (${maxAllowedRadius} m).`);
                 }
                 return;
             }

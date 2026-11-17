@@ -16,7 +16,19 @@ class AttendanceController extends Controller
      */
     public function index(Request $request): View
     {
-        $officeLocation = $this->getOfficeLocation();
+        $officeLocations = OfficeLocation::all();
+        if ($officeLocations->isEmpty()) {
+            $officeLocations = collect([
+                new OfficeLocation([
+                    'name' => 'Kantor Klik Media Nusantara',
+                    'latitude' => -6.33065944,
+                    'longitude' => 106.71566727,
+                    'radius_meters' => 100,
+                ])
+            ]);
+        }
+
+        $firstLocation = $officeLocations->first();
 
         $query = Attendance::where('user_id', $request->user()->id);
 
@@ -35,35 +47,66 @@ class AttendanceController extends Controller
                 ->whereDate('date', now()->toDateString())
                 ->first(),
             'attendances' => $attendances,
-            'officeLatitude' => (float) $officeLocation->latitude,
-            'officeLongitude' => (float) $officeLocation->longitude,
-            'maxRadiusMeters' => (int) $officeLocation->radius_meters,
+            'officeLocations' => $officeLocations,
+            'officeLatitude' => (float) $firstLocation->latitude,
+            'officeLongitude' => (float) $firstLocation->longitude,
+            'maxRadiusMeters' => (int) $firstLocation->radius_meters,
         ]);
     }
 
     /**
-     * Menyimpan absensi siswa setelah validasi radius lokasi.
+     * Menyimpan absensi siswa setelah validasi radius lokasi terhadap seluruh cabang kantor.
      */
     public function store(Request $request): RedirectResponse
     {
-        $officeLocation = $this->getOfficeLocation();
-
         $data = $request->validate([
             'action' => ['required', 'in:clock_in,clock_out'],
             'latitude' => ['required', 'numeric', 'between:-90,90'],
             'longitude' => ['required', 'numeric', 'between:-180,180'],
         ]);
 
-        $distanceMeters = $this->calculateDistanceMeters(
-            (float) $officeLocation->latitude,
-            (float) $officeLocation->longitude,
-            (float) $data['latitude'],
-            (float) $data['longitude']
-        );
+        $locations = OfficeLocation::all();
+        if ($locations->isEmpty()) {
+            $locations = collect([
+                new OfficeLocation([
+                    'name' => 'Kantor Klik Media Nusantara',
+                    'latitude' => -6.33065944,
+                    'longitude' => 106.71566727,
+                    'radius_meters' => 100,
+                ])
+            ]);
+        }
 
-        if ($distanceMeters > (int) $officeLocation->radius_meters) {
+        $isWithinAnyRadius = false;
+        $closestDistance = null;
+        $closestLocation = null;
+
+        foreach ($locations as $location) {
+            $distance = $this->calculateDistanceMeters(
+                (float) $location->latitude,
+                (float) $location->longitude,
+                (float) $data['latitude'],
+                (float) $data['longitude']
+            );
+
+            if ($closestDistance === null || $distance < $closestDistance) {
+                $closestDistance = $distance;
+                $closestLocation = $location;
+            }
+
+            if ($distance <= (int) $location->radius_meters) {
+                $isWithinAnyRadius = true;
+                break;
+            }
+        }
+
+        if (!$isWithinAnyRadius) {
+            $msg = $closestLocation
+                ? 'Jarak Anda (' . round($closestDistance) . ' m dari ' . $closestLocation->name . ') melebihi batas radius kantor (' . $closestLocation->radius_meters . ' m).'
+                : 'Jarak Terlalu Jauh, Tidak Bisa Melakukan Absensi';
+
             return back()
-                ->withErrors(['location' => 'Jarak Terlalu Jauh, Tidak Bisa Melakukan Absensi'])
+                ->withErrors(['location' => $msg])
                 ->withInput();
         }
 
@@ -119,13 +162,5 @@ class AttendanceController extends Controller
             + cos($latitudeFrom) * cos($latitudeTo) * sin($longitudeDelta / 2) ** 2;
 
         return 2 * $earthRadius * asin(min(1, sqrt($a)));
-    }
-
-    /**
-     * Mengambil lokasi kantor aktif dari database untuk dipakai sebagai titik absensi.
-     */
-    private function getOfficeLocation(): OfficeLocation
-    {
-        return OfficeLocation::query()->firstOrFail();
     }
 }

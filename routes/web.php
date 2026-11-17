@@ -38,6 +38,9 @@ Route::middleware('auth')->group(function (): void {
         Route::put('/siswa/{student}', [AdminStudentController::class, 'update'])->name('students.update');
         Route::delete('/siswa/{student}', [AdminStudentController::class, 'destroy'])->name('students.destroy');
         Route::get('/absensi', [AdminAttendanceController::class, 'index'])->name('attendance.index');
+        Route::post('/lokasi', [AdminAttendanceController::class, 'storeLocation'])->name('locations.store');
+        Route::put('/lokasi/{location}', [AdminAttendanceController::class, 'updateLocation'])->name('locations.update');
+        Route::delete('/lokasi/{location}', [AdminAttendanceController::class, 'destroyLocation'])->name('locations.destroy');
         Route::get('/jurnal', [AdminJournalController::class, 'index'])->name('journals.index');
         Route::get('/nilai', [AdminGradeController::class, 'index'])->name('grades.index');
         Route::get('/nilai/{grade}/ubah', [AdminGradeController::class, 'edit'])->name('grades.edit');
