@@ -128,14 +128,18 @@ class AttendanceController extends Controller
             return back()->withErrors(['action' => 'Absen pulang hari ini sudah tercatat.'])->withInput();
         }
 
-        $attendance->fill([
+        $fillData = [
             'clock_in' => $data['action'] === 'clock_in' ? now() : $attendance->clock_in,
             'clock_out' => $data['action'] === 'clock_out' ? now() : $attendance->clock_out,
             'status' => 'hadir',
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
-        ]);
+        ];
 
+        if (\Illuminate\Support\Facades\Schema::hasColumn('attendances', 'latitude')) {
+            $fillData['latitude'] = $data['latitude'];
+            $fillData['longitude'] = $data['longitude'];
+        }
+
+        $attendance->fill($fillData);
         $attendance->save();
 
         return back()->with('success', $data['action'] === 'clock_in'

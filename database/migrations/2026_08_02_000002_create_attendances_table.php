@@ -14,6 +14,8 @@ return new class extends Migration
             $table->date('date');
             $table->dateTime('clock_in')->nullable();
             $table->dateTime('clock_out')->nullable();
+            $table->decimal('latitude', 11, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->enum('status', ['hadir', 'izin', 'sakit'])->default('hadir');
             $table->timestamps();
 
