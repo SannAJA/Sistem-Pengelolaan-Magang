@@ -44,7 +44,7 @@ class AttendanceController extends Controller
 
         return view('attendance.index', [
             'todayAttendance' => Attendance::where('user_id', $request->user()->id)
-                ->whereDate('date', now()->toDateString())
+                ->where('date', Carbon::today()->toDateString())
                 ->first(),
             'attendances' => $attendances,
             'officeLocations' => $officeLocations,
@@ -128,9 +128,10 @@ class AttendanceController extends Controller
             return back()->withErrors(['action' => 'Absen pulang hari ini sudah tercatat.'])->withInput();
         }
 
+        $now = Carbon::now();
         $fillData = [
-            'clock_in' => $data['action'] === 'clock_in' ? now() : $attendance->clock_in,
-            'clock_out' => $data['action'] === 'clock_out' ? now() : $attendance->clock_out,
+            'clock_in' => $data['action'] === 'clock_in' ? $now : $attendance->clock_in,
+            'clock_out' => $data['action'] === 'clock_out' ? $now : $attendance->clock_out,
             'status' => 'hadir',
         ];
 
