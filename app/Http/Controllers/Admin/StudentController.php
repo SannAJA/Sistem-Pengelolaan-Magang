@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -18,9 +19,14 @@ class StudentController extends Controller
      */
     public function index(): View
     {
+        $hasLocationTable = Schema::hasTable('office_locations');
+
         return view('admin.students.index', [
-            'students' => User::where('role', 'siswa')->with('officeLocation')->latest()->paginate(15),
-            'locations' => OfficeLocation::orderBy('name')->get(),
+            'students' => User::where('role', 'siswa')
+                ->when($hasLocationTable, fn ($q) => $q->with('officeLocation'))
+                ->latest()
+                ->paginate(15),
+            'locations' => $hasLocationTable ? OfficeLocation::orderBy('name')->get() : collect(),
         ]);
     }
 
@@ -37,6 +43,10 @@ class StudentController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $locationRule = Schema::hasTable('office_locations')
+            ? ['nullable', 'exists:office_locations,id']
+            : ['nullable'];
+
         $data = $request->validate([
             'name' => [
                 'required',
@@ -46,10 +56,14 @@ class StudentController extends Controller
             ],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
-            'office_location_id' => ['nullable', 'exists:office_locations,id'],
+            'office_location_id' => $locationRule,
         ], [
             'name.unique' => 'Nama siswa sudah tersedia.',
         ]);
+
+        $locationId = Schema::hasColumn('users', 'office_location_id')
+            ? (!empty($data['office_location_id']) ? $data['office_location_id'] : null)
+            : null;
 
         $student = User::create([
             'name' => $data['name'],
@@ -57,7 +71,7 @@ class StudentController extends Controller
             'password' => Hash::make($data['password']),
             'plain_password' => $data['password'],
             'role' => 'siswa',
-            'office_location_id' => !empty($data['office_location_id']) ? $data['office_location_id'] : null,
+            'office_location_id' => $locationId,
         ]);
 
         \App\Models\Grade::create(['user_id' => $student->id]);
@@ -82,6 +96,10 @@ class StudentController extends Controller
     {
         abort_unless($student->role === 'siswa', 404);
 
+        $locationRule = Schema::hasTable('office_locations')
+            ? ['nullable', 'exists:office_locations,id']
+            : ['nullable'];
+
         $data = $request->validate([
             'name' => [
                 'required',
@@ -93,14 +111,17 @@ class StudentController extends Controller
             ],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $student->id],
             'password' => ['nullable', 'string', 'min:8'],
-            'office_location_id' => ['nullable', 'exists:office_locations,id'],
+            'office_location_id' => $locationRule,
         ], [
             'name.unique' => 'Nama siswa sudah tersedia.',
         ]);
 
         $student->name = $data['name'];
         $student->email = $data['email'];
-        $student->office_location_id = !empty($data['office_location_id']) ? $data['office_location_id'] : null;
+
+        if (Schema::hasColumn('users', 'office_location_id')) {
+            $student->office_location_id = !empty($data['office_location_id']) ? $data['office_location_id'] : null;
+        }
 
         if (! empty($data['password'])) {
             $student->password = Hash::make($data['password']);
