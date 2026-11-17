@@ -13,8 +13,15 @@ chmod -R 777 storage bootstrap/cache || true
 echo "==> Creating storage symlink..."
 php artisan storage:link || true
 
+echo "==> Clearing config & route cache..."
+php artisan config:clear || true
+php artisan route:clear || true
+php artisan view:clear || true
+
 echo "==> Running database migrations..."
 php artisan migrate --force
+echo "==> Migration status:"
+php artisan migrate:status || true
 
 echo "==> Running database seeders..."
 php artisan db:seed --force || true
