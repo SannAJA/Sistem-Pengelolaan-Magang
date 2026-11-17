@@ -12,6 +12,7 @@ function initAttendanceForm() {
         return;
     }
 
+    const actionField = form.querySelector('[data-attendance-action]');
     const latitudeField = form.querySelector('[data-attendance-latitude]');
     const longitudeField = form.querySelector('[data-attendance-longitude]');
 
@@ -38,6 +39,13 @@ function initAttendanceForm() {
 
         event.preventDefault();
 
+        // Tangkap action yang dipilih (clock_in atau clock_out)
+        const submitBtn = event.submitter || form.querySelector('button[type="submit"]');
+        const selectedAction = event.submitter?.value || submitBtn?.value || '';
+        if (actionField && selectedAction) {
+            actionField.value = selectedAction;
+        }
+
         if (!window.navigator.geolocation) {
             if (window.AppDialog) {
                 window.AppDialog.warning({
@@ -50,7 +58,6 @@ function initAttendanceForm() {
             return;
         }
 
-        const submitBtn = event.submitter || form.querySelector('button[type="submit"]');
         const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '';
         if (submitBtn) {
             submitBtn.disabled = true;
@@ -109,9 +116,8 @@ function initAttendanceForm() {
 
             form.dataset.locationReady = '1';
 
-            if (typeof form.requestSubmit === 'function' && event.submitter) {
-                form.requestSubmit(event.submitter);
-                return;
+            if (submitBtn) {
+                submitBtn.disabled = false;
             }
 
             form.submit();

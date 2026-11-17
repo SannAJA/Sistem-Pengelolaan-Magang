@@ -171,6 +171,7 @@
                 >
                     @csrf
                     <input type="hidden" name="_modal" value="attendance-form">
+                    <input type="hidden" name="action" data-attendance-action value="{{ old('action') }}">
                     <input type="hidden" name="latitude" data-attendance-latitude value="{{ old('latitude') }}">
                     <input type="hidden" name="longitude" data-attendance-longitude value="{{ old('longitude') }}">
                     
