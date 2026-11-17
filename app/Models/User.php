@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'plain_password',
         'role',
+        'office_location_id',
     ];
 
     protected $hidden = [
@@ -33,6 +34,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Mengambil data lokasi cabang kantor tempat siswa ditugaskan.
+     */
+    public function officeLocation()
+    {
+        return $this->belongsTo(OfficeLocation::class, 'office_location_id');
     }
 
     /**

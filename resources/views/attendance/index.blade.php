@@ -19,7 +19,16 @@
             <div class="d-flex flex-column flex-md-row justify-content-between gap-3 align-items-md-center mb-4">
                 <div>
                     <h1 class="page-title fw-bold mb-1">Absen Harian</h1>
-                    <p class="text-muted small mb-0">Catat kehadiran masuk dan pulang Anda secara akurat berbasis lokasi.</p>
+                    <p class="text-muted small mb-2">Catat kehadiran masuk dan pulang Anda secara akurat berbasis lokasi.</p>
+                    @if($assignedLocation)
+                        <span class="badge bg-primary-subtle text-primary border rounded-pill px-3 py-1-5">
+                            <i class="bi bi-geo-alt-fill me-1 text-danger"></i> Penempatan: {{ $assignedLocation->name }} (Radius {{ $assignedLocation->radius_meters }}m)
+                        </span>
+                    @else
+                        <span class="badge bg-light text-muted border rounded-pill px-3 py-1-5">
+                            <i class="bi bi-globe me-1 text-primary"></i> Penempatan: Bebas di Semua Cabang Kantor
+                        </span>
+                    @endif
                 </div>
                 <button type="button" class="btn btn-klik-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#attendanceModal">
                     <i class="bi bi-geo-alt-fill me-1"></i> Isi Absensi
@@ -154,7 +163,13 @@
             <div class="modal-header border-0 pb-0">
                 <div>
                     <h5 class="modal-title">Isi Absensi Harian</h5>
-                    <p class="text-muted mb-0 small">Pastikan izin GPS aktif dan Anda berada di area kantor.</p>
+                    <p class="text-muted mb-0 small">
+                        @if($assignedLocation)
+                            Pastikan Anda berada di area kantor <strong>{{ $assignedLocation->name }}</strong> (Radius {{ $assignedLocation->radius_meters }}m).
+                        @else
+                            Pastikan izin GPS aktif dan Anda berada di salah satu area kantor cabang.
+                        @endif
+                    </p>
                 </div>
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>

@@ -17,6 +17,7 @@ function initStudentEditModal() {
     const idField = modalEl.querySelector('[data-student-id-field]');
     const nameField = modalEl.querySelector('[data-student-name-field]');
     const emailField = modalEl.querySelector('[data-student-email-field]');
+    const locationField = modalEl.querySelector('[data-student-location-field]');
     const passwordField = modalEl.querySelector('[data-student-password-field]');
     const currentPasswordText = modalEl.querySelector('[data-student-current-password-text]');
     const toggleCurrentBtn = modalEl.querySelector('.toggle-modal-current-password');
@@ -34,6 +35,7 @@ function initStudentEditModal() {
         const name = trigger.dataset.studentName || '';
         const email = trigger.dataset.studentEmail || '';
         const plainPassword = trigger.dataset.studentPlainPassword || '';
+        const locationId = trigger.dataset.studentLocationId || '';
 
         if (updateUrl) {
             form.action = updateUrl;
@@ -49,6 +51,10 @@ function initStudentEditModal() {
 
         if (emailField) {
             emailField.value = email;
+        }
+
+        if (locationField) {
+            locationField.value = locationId;
         }
 
         if (passwordField) {

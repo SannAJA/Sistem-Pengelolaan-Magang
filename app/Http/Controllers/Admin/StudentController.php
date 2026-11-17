@@ -3,21 +3,24 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\OfficeLocation;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class StudentController extends Controller
 {
     /**
      * Menampilkan daftar siswa magang yang terdaftar di sistem.
      */
-    public function index(): \Illuminate\View\View
+    public function index(): View
     {
         return view('admin.students.index', [
-            'students' => User::where('role', 'siswa')->latest()->paginate(15),
+            'students' => User::where('role', 'siswa')->with('officeLocation')->latest()->paginate(15),
+            'locations' => OfficeLocation::orderBy('name')->get(),
         ]);
     }
 
@@ -43,6 +46,7 @@ class StudentController extends Controller
             ],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
+            'office_location_id' => ['nullable', 'exists:office_locations,id'],
         ], [
             'name.unique' => 'Nama siswa sudah tersedia.',
         ]);
@@ -53,6 +57,7 @@ class StudentController extends Controller
             'password' => Hash::make($data['password']),
             'plain_password' => $data['password'],
             'role' => 'siswa',
+            'office_location_id' => !empty($data['office_location_id']) ? $data['office_location_id'] : null,
         ]);
 
         \App\Models\Grade::create(['user_id' => $student->id]);
@@ -71,7 +76,7 @@ class StudentController extends Controller
     }
 
     /**
-     * Memperbarui data akun siswa, termasuk password bila diisi.
+     * Memperbarui data akun siswa, termasuk password dan lokasi penempatan bila diisi.
      */
     public function update(Request $request, User $student): RedirectResponse
     {
@@ -88,12 +93,14 @@ class StudentController extends Controller
             ],
             'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $student->id],
             'password' => ['nullable', 'string', 'min:8'],
+            'office_location_id' => ['nullable', 'exists:office_locations,id'],
         ], [
             'name.unique' => 'Nama siswa sudah tersedia.',
         ]);
 
         $student->name = $data['name'];
         $student->email = $data['email'];
+        $student->office_location_id = !empty($data['office_location_id']) ? $data['office_location_id'] : null;
 
         if (! empty($data['password'])) {
             $student->password = Hash::make($data['password']);

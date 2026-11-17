@@ -16,16 +16,25 @@ class AttendanceController extends Controller
      */
     public function index(Request $request): View
     {
-        $officeLocations = OfficeLocation::all();
-        if ($officeLocations->isEmpty()) {
-            $officeLocations = collect([
-                new OfficeLocation([
-                    'name' => 'Kantor Klik Media Nusantara',
-                    'latitude' => -6.33065944,
-                    'longitude' => 106.71566727,
-                    'radius_meters' => 100,
-                ])
-            ]);
+        $assignedLocation = null;
+        if ($request->user()->office_location_id) {
+            $assignedLocation = OfficeLocation::find($request->user()->office_location_id);
+        }
+
+        if ($assignedLocation) {
+            $officeLocations = collect([$assignedLocation]);
+        } else {
+            $officeLocations = OfficeLocation::all();
+            if ($officeLocations->isEmpty()) {
+                $officeLocations = collect([
+                    new OfficeLocation([
+                        'name' => 'Kantor Klik Media Nusantara',
+                        'latitude' => -6.33065944,
+                        'longitude' => 106.71566727,
+                        'radius_meters' => 100,
+                    ])
+                ]);
+            }
         }
 
         $firstLocation = $officeLocations->first();
@@ -48,6 +57,7 @@ class AttendanceController extends Controller
                 ->first(),
             'attendances' => $attendances,
             'officeLocations' => $officeLocations,
+            'assignedLocation' => $assignedLocation,
             'officeLatitude' => (float) $firstLocation->latitude,
             'officeLongitude' => (float) $firstLocation->longitude,
             'maxRadiusMeters' => (int) $firstLocation->radius_meters,
@@ -65,16 +75,25 @@ class AttendanceController extends Controller
             'longitude' => ['required', 'numeric', 'between:-180,180'],
         ]);
 
-        $locations = OfficeLocation::all();
-        if ($locations->isEmpty()) {
-            $locations = collect([
-                new OfficeLocation([
-                    'name' => 'Kantor Klik Media Nusantara',
-                    'latitude' => -6.33065944,
-                    'longitude' => 106.71566727,
-                    'radius_meters' => 100,
-                ])
-            ]);
+        $assignedLocation = null;
+        if ($request->user()->office_location_id) {
+            $assignedLocation = OfficeLocation::find($request->user()->office_location_id);
+        }
+
+        if ($assignedLocation) {
+            $locations = collect([$assignedLocation]);
+        } else {
+            $locations = OfficeLocation::all();
+            if ($locations->isEmpty()) {
+                $locations = collect([
+                    new OfficeLocation([
+                        'name' => 'Kantor Klik Media Nusantara',
+                        'latitude' => -6.33065944,
+                        'longitude' => 106.71566727,
+                        'radius_meters' => 100,
+                    ])
+                ]);
+            }
         }
 
         $isWithinAnyRadius = false;

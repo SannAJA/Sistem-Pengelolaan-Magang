@@ -21,7 +21,7 @@
     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
         <div>
             <h1 class="h4 fw-bold mb-1">Kelola Siswa</h1>
-            <p class="text-muted small mb-0">Daftar siswa magang yang terdaftar di sistem.</p>
+            <p class="text-muted small mb-0">Daftar siswa magang yang terdaftar di sistem beserta penempatan kantor cabang.</p>
         </div>
         <button type="button" class="btn btn-klik-primary rounded-pill px-4 shadow-sm" data-bs-toggle="modal" data-bs-target="#studentCreateModal">
             <i class="bi bi-plus-lg me-1"></i> Tambah Siswa
@@ -35,6 +35,7 @@
                     <th>Nama Siswa</th>
                     <th>Email</th>
                     <th>Password</th>
+                    <th>Penempatan Lokasi</th>
                     <th>Role</th>
                     <th>Terdaftar</th>
                     <th class="text-end">Aksi</th>
@@ -64,6 +65,17 @@
                                 <span class="badge bg-secondary-subtle text-secondary rounded-pill" style="font-size: 0.7rem;">(Dihash)</span>
                             @endif
                         </td>
+                        <td data-label="Penempatan Lokasi">
+                            @if($student->officeLocation)
+                                <span class="badge bg-primary-subtle text-primary border rounded-pill px-3 py-1-5">
+                                    <i class="bi bi-geo-alt-fill me-1"></i> {{ $student->officeLocation->name }}
+                                </span>
+                            @else
+                                <span class="badge bg-light text-muted border rounded-pill px-3 py-1-5">
+                                    <i class="bi bi-globe me-1"></i> Semua Cabang (Bebas)
+                                </span>
+                            @endif
+                        </td>
                         <td data-label="Role"><span class="badge bg-info-subtle text-info-emphasis rounded-pill px-3 py-1-5">Siswa</span></td>
                         <td data-label="Terdaftar">{{ $student->created_at?->format('d M Y') }}</td>
                         <td data-label="Aksi" class="text-end">
@@ -77,6 +89,7 @@
                                     data-student-name="{{ $student->name }}"
                                     data-student-email="{{ $student->email }}"
                                     data-student-plain-password="{{ $student->plain_password ?? '' }}"
+                                    data-student-location-id="{{ $student->office_location_id ?? '' }}"
                                     data-student-update-url="{{ route('admin.students.update', $student) }}"
                                 >
                                     <i class="bi bi-pencil-square me-1"></i> Ubah
@@ -100,7 +113,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="text-center text-muted py-4">Belum ada siswa.</td></tr>
+                    <tr><td colspan="7" class="text-center text-muted py-4">Belum ada siswa.</td></tr>
                 @endforelse
             </tbody>
         </table>
@@ -115,7 +128,7 @@
             <div class="modal-header border-0 pb-0">
                 <div>
                     <h5 class="modal-title">Tambah Siswa Baru</h5>
-                    <p class="text-muted mb-0 small">Masukkan data akun siswa magang baru.</p>
+                    <p class="text-muted mb-0 small">Masukkan data akun siswa magang baru dan tentukan cabang penempatan.</p>
                 </div>
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
@@ -132,6 +145,18 @@
                         <label class="form-label fw-semibold">Alamat Email</label>
                         <input type="email" name="email" class="form-control {{ $studentCreateOld && $errors->has('email') ? 'is-invalid' : '' }}" value="{{ $studentCreateOld ? old('email') : '' }}" placeholder="siswa@email.com" required>
                         @if($studentCreateOld && $errors->has('email')) <div class="invalid-feedback d-block">{{ $errors->first('email') }}</div> @endif
+                    </div>
+                    <div>
+                        <label class="form-label fw-semibold">Lokasi Penempatan Kantor</label>
+                        <select name="office_location_id" class="form-select rounded-3">
+                            <option value="">Semua Lokasi Cabang (Bebas Absen Dimana Saja)</option>
+                            @foreach($locations as $loc)
+                                <option value="{{ $loc->id }}" {{ old('office_location_id') == $loc->id ? 'selected' : '' }}>
+                                    {{ $loc->name }} (Radius {{ $loc->radius_meters }}m)
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="form-text small text-muted">Pilih cabang spesifik untuk mengunci area absensi siswa.</div>
                     </div>
                     <div>
                         <label class="form-label fw-semibold">Password Akun</label>
@@ -161,7 +186,7 @@
             <div class="modal-header border-0 pb-0">
                 <div>
                     <h5 class="modal-title" data-student-modal-title>Ubah Data Siswa</h5>
-                    <p class="text-muted mb-0 small">Perbarui data akun siswa magang.</p>
+                    <p class="text-muted mb-0 small">Perbarui data akun dan lokasi penempatan siswa magang.</p>
                 </div>
                 <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
@@ -180,6 +205,18 @@
                         <label class="form-label fw-semibold">Alamat Email</label>
                         <input type="email" name="email" data-student-email-field class="form-control {{ $studentEditOld && $errors->has('email') ? 'is-invalid' : '' }}" value="{{ $studentEditOld ? old('email') : '' }}" required>
                         @if($studentEditOld && $errors->has('email')) <div class="invalid-feedback d-block">{{ $errors->first('email') }}</div> @endif
+                    </div>
+                    <div>
+                        <label class="form-label fw-semibold">Lokasi Penempatan Kantor</label>
+                        <select name="office_location_id" data-student-location-field class="form-select rounded-3">
+                            <option value="">Semua Lokasi Cabang (Bebas Absen Dimana Saja)</option>
+                            @foreach($locations as $loc)
+                                <option value="{{ $loc->id }}">
+                                    {{ $loc->name }} (Radius {{ $loc->radius_meters }}m)
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="form-text small text-muted">Pilih cabang spesifik untuk mengunci area absensi siswa.</div>
                     </div>
                     <div>
                         <label class="form-label fw-semibold">Password Baru (Opsional)</label>
