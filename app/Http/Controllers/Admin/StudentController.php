@@ -61,16 +61,17 @@ class StudentController extends Controller
             'name.unique' => 'Nama siswa sudah tersedia.',
         ]);
 
-        $locationId = Schema::hasColumn('users', 'office_location_id')
-            ? (!empty($data['office_location_id']) ? $data['office_location_id'] : null)
+        $newLocationId = Schema::hasColumn('users', 'office_location_id')
+            ? $request->input('office_location_id')
             : null;
+        $locationId = ($newLocationId !== '' && $newLocationId !== null) ? (int) $newLocationId : null;
 
         $student = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'plain_password' => $data['password'],
-            'role' => 'siswa',
+            'name'               => $data['name'],
+            'email'              => $data['email'],
+            'password'           => Hash::make($data['password']),
+            'plain_password'     => $data['password'],
+            'role'               => 'siswa',
             'office_location_id' => $locationId,
         ]);
 
@@ -116,11 +117,14 @@ class StudentController extends Controller
             'name.unique' => 'Nama siswa sudah tersedia.',
         ]);
 
-        $student->name = $data['name'];
+        $student->name  = $data['name'];
         $student->email = $data['email'];
 
         if (Schema::hasColumn('users', 'office_location_id')) {
-            $student->office_location_id = !empty($data['office_location_id']) ? $data['office_location_id'] : null;
+            $newLocationId = $request->input('office_location_id');
+            $student->office_location_id = ($newLocationId !== '' && $newLocationId !== null)
+                ? (int) $newLocationId
+                : null;
         }
 
         if (! empty($data['password'])) {
